@@ -57,17 +57,23 @@ const Navbar = () => {
                     textColor={isOpen ? 'teal.500' : 'gray.100'}
                   />
                   <MenuList>
-                    <MenuItem icon={<HiHome />}>Accueil</MenuItem>
-                    <MenuItem icon={<FaGamepad />}>Parties</MenuItem>
-                    <MenuItem icon={<BiStats />}>Statistiques</MenuItem>
+                    <Link as={RouterLink} to="/">
+                      <MenuItem icon={<HiHome />}>Accueil</MenuItem>
+                    </Link>
+                    <Link as={RouterLink} to="/games">
+                      <MenuItem icon={<FaGamepad />}>Parties</MenuItem>
+                    </Link>
+                    <Link as={RouterLink} to="/stats">
+                      <MenuItem icon={<BiStats />}>Statistiques</MenuItem>
+                    </Link>
                   </MenuList>
                 </>
               )}
             </Menu>
           )}
           <Spacer />
-          <Link as={RouterLink} to="/stats">
-            <NavbarItem name="Mon compte" />
+          <Link as={RouterLink} to="/login">
+            <NavbarItem name="Se connecter" />
           </Link>
         </Flex>
 
