@@ -1,7 +1,13 @@
+import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar/Navbar';
 
-const Home = () => {
-  return <Navbar />;
+const Games = () => {
+  return (
+    <>
+      <Navbar />
+      <Footer />
+    </>
+  );
 };
 
-export default Home;
+export default Games;
