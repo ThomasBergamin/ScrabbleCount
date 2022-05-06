@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Stats from './pages/Stats';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import NotFound from './pages/404';
 
 export const Router = () => {
   return (
@@ -14,6 +15,7 @@ export const Router = () => {
         <Route path="/stats" element={<Stats />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
   );
