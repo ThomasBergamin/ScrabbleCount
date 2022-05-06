@@ -12,6 +12,7 @@ import {
   Link,
   Divider,
 } from '@chakra-ui/react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 const LoginCard = () => {
   return (
@@ -19,14 +20,14 @@ const LoginCard = () => {
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'} textAlign="center">
           <Heading fontSize={'4xl'} color="gray.100">
-            Connectez vous à votre compte
+            Connecte toi à ton compte
           </Heading>
           <Text fontSize={'lg'} color={'gray.100'}>
-            et visualisez vos <Link color={'teal.400'}>statistiques</Link> ✌️
+            et visualise tes <Link color={'teal.400'}>statistiques</Link> ✌️
           </Text>
         </Stack>
 
-        <Box rounded={'lg'} bg="white" boxShadow={'lg'} p={8}>
+        <Box rounded={'lg'} bg="gray.600" boxShadow={'lg'} p={8}>
           <Stack spacing={4}>
             <Button>Se connecter avec Google</Button>
             <Divider />
@@ -45,9 +46,12 @@ const LoginCard = () => {
                 align={'start'}
                 justify={'space-between'}
               >
-                <Checkbox colorScheme="teal">Se rappeler de moi</Checkbox>
+                <Checkbox colorScheme="teal" color="whiteAlpha.900">
+                  Se rappeler de moi
+                </Checkbox>
                 <Link color={'teal.500'}>Mot de passe oublié ?</Link>
               </Stack>
+
               <Button
                 bg={'teal.500'}
                 color={'white'}
@@ -55,9 +59,15 @@ const LoginCard = () => {
                   bg: 'teal.600',
                 }}
               >
-                Sign in
+                Se connecter
               </Button>
             </Stack>
+            <Text color="whiteAlpha.900">
+              Pas encore de compte ?{' '}
+              <Link as={ReactRouterLink} color={'teal.500'} to="/register">
+                S&lsquo;inscrire{' '}
+              </Link>
+            </Text>
           </Stack>
         </Box>
       </Stack>
