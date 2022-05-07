@@ -6,8 +6,13 @@ import {
   Input,
   Button,
   FormErrorMessage,
+  Text,
+  Link,
+  useToast,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../contexts/Auth/useAuth';
 
 interface IRegisterForm {
   lastName: string;
@@ -17,19 +22,39 @@ interface IRegisterForm {
 }
 
 const RegisterForm = () => {
+  const auth = useAuth();
+  const toast = useToast();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm<IRegisterForm>();
 
-  function onSubmit(values: any) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-      }, 3000);
-    });
-  }
+  const onSubmit: SubmitHandler<IRegisterForm> = (data) => {
+    if (auth) {
+      auth
+        .register(data.lastName, data.firstName, data.email, data.password)
+        .then((response) => {
+          if (response.status == '200') {
+            navigate('/login', { replace: true });
+            toast({
+              position: 'top',
+              title: 'Compte crée',
+              description: 'Tu peux maintenant te connecter 🥳',
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            });
+          }
+        })
+        .catch((error: any) => {
+          if (error.data.error.errors.email.kind === 'unique') {
+            console.log('Un utilisateur est déjà inscrit avec ce mail !');
+          } // TODO: set error with email in react hook form
+        });
+    }
+  };
   return (
     <Box rounded={'lg'} bg="gray.600" boxShadow={'lg'} p={8}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -103,11 +128,7 @@ const RegisterForm = () => {
           </FormControl>
           <Button
             width="100%"
-            bg={'teal.500'}
-            color={'white'}
-            _hover={{
-              bg: 'teal.600',
-            }}
+            colorScheme="teal"
             isLoading={isSubmitting}
             type="submit"
           >
@@ -115,6 +136,12 @@ const RegisterForm = () => {
           </Button>
         </Stack>
       </form>
+      <Text color="whiteAlpha.900" mt={4}>
+        Déjà inscrit ?{' '}
+        <Link as={ReactRouterLink} color={'teal.500'} to="/login">
+          Se connecter{' '}
+        </Link>
+      </Text>
     </Box>
   );
 };
