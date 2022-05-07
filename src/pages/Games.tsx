@@ -44,7 +44,7 @@ const Games = () => {
       <Navbar />
       <Container maxW="120ch" py="3">
         <SlideFade in offsetY="50px">
-          <Flex>
+          <Flex alignItems="baseline">
             <Heading as="h2" textColor="gray.50" size="xl">
               Toutes les parties
             </Heading>
