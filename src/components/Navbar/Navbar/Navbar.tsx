@@ -44,7 +44,7 @@ const Navbar = () => {
   return (
     <Box as="header">
       <Box h="5px" bg="teal.500" />
-      <Container maxW="120ch" py="3" px={4}>
+      <Container maxW="120ch" py="5" px={4}>
         <Flex direction="row">
           {isLargerThan700 ? (
             <>
@@ -101,16 +101,16 @@ const Navbar = () => {
           <Spacer />
           {auth?.currentUser.userId ? (
             <Box onClick={handleDisconnect}>
-              <NavbarItem name="Se déconnecter" />
+              <NavbarItem disconnect name="Se déconnecter" />
             </Box>
           ) : (
             <Link as={RouterLink} to="/login">
-              <NavbarItem name="Se connecter" />
+              <NavbarItem connect name="Se connecter" />
             </Link>
           )}
         </Flex>
 
-        <Divider mt={2} w="100%" mx="auto" />
+        <Divider mt={4} w="100%" mx="auto" />
       </Container>
     </Box>
   );

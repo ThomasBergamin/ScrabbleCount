@@ -6,7 +6,6 @@ interface ITable {
 }
 
 const Table = ({ headers, rows }: ITable) => {
-  console.log(headers, rows);
   return (
     <TableWrap colorScheme="teal">
       <Thead>
