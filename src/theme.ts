@@ -1,17 +1,11 @@
 import { extendTheme } from '@chakra-ui/react';
+import { StyledButton } from './common/theme/Button';
+import { StyledInput } from './common/theme/Input';
 
 const theme = extendTheme({
   components: {
-    Input: {
-      baseStyle: {
-        field: {
-          color: 'whiteAlpha.900',
-        },
-      },
-      defaultProps: {
-        focusBorderColor: 'teal.500',
-      },
-    },
+    Button: StyledButton,
+    Input: StyledInput,
     FormLabel: {
       baseStyle: {
         color: 'whiteAlpha.900',
