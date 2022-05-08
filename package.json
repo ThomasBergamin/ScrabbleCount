@@ -14,6 +14,7 @@
     "eslint": "^8.14.0",
     "framer-motion": "^6",
     "git-cz": "^4.8.0",
+    "moment": "^2.29.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.30.0",

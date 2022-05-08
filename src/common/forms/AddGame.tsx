@@ -7,10 +7,12 @@ import {
   VStack,
   Button,
   FormErrorMessage,
+  Select,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dbService from '../../services/dbService';
 import { useAuth } from '../../contexts/Auth/useAuth';
+import usePlayers from '../../hooks/usePlayers';
 
 interface IAddGameForm {
   date: string;
@@ -26,6 +28,7 @@ interface IAddGameForm {
 
 const AddGame = ({ authenticated }: { authenticated: boolean }) => {
   const auth = useAuth();
+  const { players } = usePlayers();
   const {
     handleSubmit,
     register,
@@ -57,6 +60,7 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
         w={['100%', '100%', '50%']}
         filter={authenticated ? '' : 'blur(3px)'}
         cursor={authenticated ? 'pointer' : 'not-allowed'}
+        boxShadow="0 2px 0 hsla(0, 0%, 100%, .3), inset 0 3px 5px hsla(0, 0%, 0%, 0.5)"
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isInvalid={!!errors.date}>
@@ -68,7 +72,9 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
               {...register('date', {
                 required: 'Champ requis',
               })}
-            />{' '}
+              border="0px"
+              boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
+            />
             <FormErrorMessage>
               {errors.date && errors.date.message}
             </FormErrorMessage>
@@ -84,6 +90,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
               {...register('time', {
                 required: 'Champ requis',
               })}
+              border="0px"
+              boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
             />
             <FormErrorMessage>
               {errors.time && errors.time.message}
@@ -105,6 +113,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
                   message: 'Au moins 2 caractères requis',
                 },
               })}
+              border="0px"
+              boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
             />
             <FormErrorMessage>
               {errors.location && errors.location.message}
@@ -115,19 +125,24 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
             <VStack spacing="1" alignItems="baseline">
               <FormControl isInvalid={!!errors.player1}>
                 <FormLabel htmlFor="player1">Joueur 1</FormLabel>
-                <Input
+                <Select
+                  color="whiteAlpha.900"
+                  border="0px"
+                  boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
                   disabled={!authenticated}
                   id="player1"
-                  type="text"
                   placeholder="Joueur 1"
                   {...register('player1', {
                     required: 'Champ requis',
-                    minLength: {
-                      value: 2,
-                      message: 'Au moins 2 caractères requis',
-                    },
                   })}
-                />
+                >
+                  {players &&
+                    players.map((player) => (
+                      <option value={player._id} key={player._id}>
+                        {player.firstName + ' ' + player.lastName[0] + '.'}
+                      </option>
+                    ))}
+                </Select>
                 <FormErrorMessage>
                   {errors.player1 && errors.player1.message}
                 </FormErrorMessage>
@@ -146,6 +161,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
                   {...register('score1', {
                     required: 'Champ requis',
                   })}
+                  border="0px"
+                  boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
                 />
                 <FormErrorMessage>
                   {errors.score1 && errors.score1.message}
@@ -164,6 +181,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
                   {...register('scrabbles1', {
                     required: 'Champ requis',
                   })}
+                  border="0px"
+                  boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
                 />
                 <FormErrorMessage>
                   {errors.scrabbles1 && errors.scrabbles1.message}
@@ -175,19 +194,26 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
             <VStack spacing="1" alignItems="baseline">
               <FormControl isInvalid={!!errors.player2}>
                 <FormLabel htmlFor="player2">Joueur 2</FormLabel>
-                <Input
+                <Select
+                  color="whiteAlpha.900"
+                  border="0px"
+                  boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
                   disabled={!authenticated}
                   id="player2"
-                  type="text"
                   placeholder="Joueur 2"
                   {...register('player2', {
                     required: 'Champ requis',
-                    minLength: {
-                      value: 2,
-                      message: 'Au moins 2 caractères requis',
-                    },
                   })}
-                />
+                >
+                  {players &&
+                    players.map((player) => (
+                      <option value={player._id} key={player._id}>
+                        {player.firstName + ' ' + player.lastName[0] + '.'}
+                      </option>
+                    ))}{' '}
+                  {/* TODO : When a player was selected before, removes it from the array here */}
+                </Select>
+
                 <FormErrorMessage>
                   {errors.player2 && errors.player2.message}
                 </FormErrorMessage>
@@ -205,6 +231,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
                   {...register('score2', {
                     required: 'Champ requis',
                   })}
+                  border="0px"
+                  boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
                 />
                 <FormErrorMessage>
                   {errors.score2 && errors.score2.message}
@@ -223,6 +251,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
                   {...register('scrabbles2', {
                     required: 'Champ requis',
                   })}
+                  border="0px"
+                  boxShadow="0 1px 0 hsla(0, 0%, 100%, .15), inset 0 1px 1px hsla(0, 0%, 0%, 0.4)"
                 />
                 <FormErrorMessage>
                   {errors.scrabbles2 && errors.scrabbles2.message}
@@ -238,6 +268,8 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
             w="100%"
             isLoading={isSubmitting}
             disabled={!authenticated}
+            border="0px"
+            boxShadow="inset 0 1px 0 hsla(179, 30%, 60%),  0 1px 3px hsla(0, 0%, 0%, 0.7)"
           >
             Ajouter
           </Button>

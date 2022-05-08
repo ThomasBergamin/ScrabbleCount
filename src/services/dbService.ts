@@ -5,15 +5,13 @@ const instance = axios.create({
   baseURL: API_URL,
 });
 
+// TODO : every time a call is made with token, if error => refresh token
+
 class dbService {
-  getGames(
-    signal: AbortSignal,
-    token: {
-      Authorization: string;
-    },
-  ) {
-    return instance.get(API_URL + 'games', { headers: token, signal });
+  getGames(token: { Authorization: string }) {
+    return instance.get(API_URL + 'games', { headers: token });
   }
+
   postGames(
     data: {
       date: string;
@@ -32,6 +30,10 @@ class dbService {
     },
   ) {
     return instance.post(API_URL + 'games', data, { headers: token });
+  }
+
+  getPlayers(token: { Authorization: string }) {
+    return instance.get(API_URL + 'players', { headers: token });
   }
 }
 

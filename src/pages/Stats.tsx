@@ -9,39 +9,16 @@ import {
   StatHelpText,
   StatLabel,
   StatNumber,
-  Table,
-  Tr,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
   SlideFade,
 } from '@chakra-ui/react';
+import moment from 'moment';
+import 'moment/locale/fr';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar/Navbar';
 
 const Stats = () => {
-  const today = new Date();
-  const months = [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Decembre',
-  ];
-  const month = months[today.getMonth()];
-  const day = today.getDay();
-  const hours = today.getHours();
-  const minutes = today.getMinutes();
-  const date = `${day} ${month} à ${hours}:${minutes}`;
+  moment.locale('fr');
+  const date = moment().format('Do MMMM YYYY, hh:mm');
   return (
     <>
       <Navbar />
@@ -57,7 +34,14 @@ const Stats = () => {
             </Heading>
           </Flex>
 
-          <Box mt="4" width="100%" borderRadius="10" bgColor="teal.400" p="6">
+          <Box
+            mt="4"
+            width="100%"
+            borderRadius="10"
+            bgColor="teal.400"
+            p="6"
+            boxShadow=" 0 2px 0 hsla(179, 30%, 60%), inset  0 2px 6px hsla(0, 0%, 0%, 0.6)"
+          >
             <StatGroup color="whiteAlpha.900" height="100%html">
               <Stat>
                 <StatLabel>Meilleur Joueur</StatLabel>
