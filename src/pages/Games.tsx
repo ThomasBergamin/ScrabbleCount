@@ -14,8 +14,10 @@ import { Navbar } from '../components/Navbar/Navbar/Navbar';
 import Table from '../components/Table/Table';
 import useGames from '../hooks/useGames';
 import usePlayers from '../hooks/usePlayers';
+import { useNavigate } from 'react-router-dom';
 
 const Games = () => {
+  const navigate = useNavigate();
   const { games, loading } = useGames();
   const { players, loading: loadingPlayers } = usePlayers();
 
@@ -37,11 +39,15 @@ const Games = () => {
           }
         } else winnerName = 'Égalité';
 
-        gamesRows.push([winnerName, game.player1.score, game.date]);
+        gamesRows.push([game._id, winnerName, game.player1.score, game.date]);
       });
       setRows(() => [...gamesRows]);
     }
   }, [games, loading, loadingPlayers, players]);
+
+  const handleRowClick = (id: string) => {
+    navigate(`/games/${id}`, { replace: true });
+  };
 
   return (
     <>
@@ -64,7 +70,11 @@ const Games = () => {
             borderRadius="lg"
             boxShadow="0 2px 0 hsla(0, 0%, 100%, .1), inset 0 3px 5px hsla(0, 0%, 0%, 0.5)"
           >
-            <Table headers={headers} rows={rows} />
+            <Table
+              headers={headers}
+              rows={rows}
+              handleRowClick={handleRowClick}
+            />
           </TableContainer>
         </SlideFade>
       </Container>
