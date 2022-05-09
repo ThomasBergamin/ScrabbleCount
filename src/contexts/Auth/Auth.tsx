@@ -9,6 +9,7 @@ export interface IAuth {
 
 interface IAuthContext {
   isAuthenticated: boolean;
+  isLoading: boolean;
   currentUser: IAuth;
   login: (email: string, password: string) => Promise<any>;
   logout: () => void;
@@ -31,6 +32,7 @@ export const AuthProvider = ({
   children: ReactNode;
 }): JSX.Element => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<IAuth>(
     localStorage.getItem('authTokens')
       ? JSON.parse(localStorage.getItem('authTokens') || '')
@@ -45,6 +47,38 @@ export const AuthProvider = ({
 
   const instance = axios.create({ baseURL: API_URL });
 
+  useEffect(() => {
+    setIsLoading(true);
+    const localStorageInfos: IAuth = localStorage.getItem('authTokens')
+      ? JSON.parse(localStorage.getItem('authTokens') || '')
+      : {
+          token: '',
+          refreshToken: '',
+          userId: '',
+        };
+    const axiosInstance = axios.create({
+      headers: {
+        Authorization: `Bearer ${localStorageInfos.refreshToken}`,
+      },
+    });
+
+    axiosInstance
+      .post(API_URL + 'checkToken')
+      .then((response: AxiosResponse) => {
+        if (response.status === 204) {
+          setIsAuthenticated(true);
+          setIsLoading(false);
+        } else {
+          setIsAuthenticated(false);
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      });
+  }, []);
+
   const login = async (email: string, password: string) => {
     return await instance
       .post('/login', {
@@ -56,6 +90,7 @@ export const AuthProvider = ({
         if (response.data.token && response.data.refreshToken) {
           setCurrentUser({ ...response.data });
           setIsAuthenticated(true);
+          setIsLoading(false);
           localStorage.setItem(
             'authTokens',
             JSON.stringify({
@@ -116,31 +151,6 @@ export const AuthProvider = ({
     }
   };
 
-  useEffect(() => {
-    const localStorageInfos: IAuth = localStorage.getItem('authTokens')
-      ? JSON.parse(localStorage.getItem('authTokens') || '')
-      : {
-          token: '',
-          refreshToken: '',
-          userId: '',
-        };
-    const axiosInstance = axios.create({
-      headers: {
-        Authorization: `Bearer ${localStorageInfos.refreshToken}`,
-      },
-    });
-    axiosInstance
-      .post(API_URL + 'checkToken')
-      .then((response: AxiosResponse) => {
-        if (response.status === 204) {
-          setIsAuthenticated(true);
-        }
-      })
-      .catch(() => {
-        setIsAuthenticated(false);
-      });
-  }, []);
-
   return (
     <AuthContext.Provider
       value={{
@@ -150,6 +160,7 @@ export const AuthProvider = ({
         register,
         authHeader,
         isAuthenticated,
+        isLoading,
       }}
     >
       {children}

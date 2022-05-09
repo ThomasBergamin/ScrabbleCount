@@ -13,16 +13,51 @@ import Register from './pages/Register';
 import NotFound from './pages/404';
 import GameDetails from './pages/GameDetails';
 import { useAuth } from './contexts/Auth/useAuth';
+import { Center, Spinner } from '@chakra-ui/react';
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const auth = useAuth();
   const location = useLocation();
 
-  return auth?.isAuthenticated ? (
+  if (auth?.isLoading) {
+    return (
+      <Center>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="teal.500"
+          size="xl"
+        />
+      </Center>
+    );
+  }
+
+  return auth?.isAuthenticated && !auth.isLoading ? (
     children
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />
   );
+};
+
+const CheckIfAuthenticated = ({ children }: { children: JSX.Element }) => {
+  const auth = useAuth();
+
+  if (auth?.isLoading) {
+    return (
+      <Center>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="teal.500"
+          size="xl"
+        />
+      </Center>
+    );
+  }
+
+  return auth?.isAuthenticated ? <Navigate to="/" replace /> : children;
 };
 
 export const Router = () => {
@@ -30,7 +65,14 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route
+          path="/login"
+          element={
+            <CheckIfAuthenticated>
+              <Login />
+            </CheckIfAuthenticated>
+          }
+        ></Route>
         <Route
           path="/register"
           element={
