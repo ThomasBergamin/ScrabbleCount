@@ -41,7 +41,6 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
         .postGames(data, auth.authHeader())
         .then((response) => {
           if (response.status === 200) {
-            console.log(200);
             alert('Success');
           } // TODO: Redirect user to game page (with id sent from backend)
         })

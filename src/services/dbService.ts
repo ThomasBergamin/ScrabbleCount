@@ -1,9 +1,7 @@
-import axios from 'axios';
+import axiosApiInstance from './axiosInstance';
 
 const API_URL = 'http://localhost:3001/api/';
-const instance = axios.create({
-  baseURL: API_URL,
-});
+const instance = axiosApiInstance;
 
 // TODO : every time a call is made with token, if error => refresh token
 
