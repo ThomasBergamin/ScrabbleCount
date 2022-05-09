@@ -22,7 +22,7 @@ const Games = () => {
   const { players, loading: loadingPlayers } = usePlayers();
 
   moment.locale('fr');
-  const date = moment().format('Do MMMM YYYY, hh:mm');
+  const date = moment().format('Do MMMM YYYY, HH:mm');
 
   const headers = ['Gagnant', 'Score', 'Date'];
   const [rows, setRows] = useState<string[][]>([]);
@@ -32,14 +32,21 @@ const Games = () => {
       const gamesRows: string[][] = [];
       games.forEach((game) => {
         let winnerName = '';
+        let winnerScore = '';
         if (game.winner) {
-          const winner = players.find((player) => player._id === game.winner);
+          const winner = players.find(
+            (player) => player._id === game.winner?.playerId,
+          );
           if (winner) {
             winnerName = winner.firstName;
+            winnerScore = game.winner.playerScore;
           }
-        } else winnerName = 'Égalité';
+        } else {
+          winnerName = 'Égalité';
+          winnerScore = game.player1.score;
+        }
 
-        gamesRows.push([game._id, winnerName, game.player1.score, game.date]);
+        gamesRows.push([game._id, winnerName, winnerScore, game.date]);
       });
       setRows(() => [...gamesRows]);
     }
@@ -56,7 +63,7 @@ const Games = () => {
         <SlideFade in offsetY="50px">
           <Flex alignItems="baseline">
             <Heading as="h2" textColor="gray.50" size="xl">
-              Toutes les parties
+              Toutes mes parties
             </Heading>
             <Spacer></Spacer>
             <Heading as="h3" textColor="gray.50" size="l">

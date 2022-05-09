@@ -18,7 +18,7 @@ import { Navbar } from '../components/Navbar/Navbar/Navbar';
 
 const Stats = () => {
   moment.locale('fr');
-  const date = moment().format('Do MMMM YYYY, hh:mm');
+  const date = moment().format('Do MMMM YYYY, HH:mm');
   return (
     <>
       <Navbar />
