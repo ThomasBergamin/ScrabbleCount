@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { createContext, ReactNode, useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { createContext, ReactNode, useState, useEffect } from 'react';
 
 export interface IAuth {
   token: string;
@@ -8,6 +8,7 @@ export interface IAuth {
 }
 
 interface IAuthContext {
+  isAuthenticated: boolean;
   currentUser: IAuth;
   login: (email: string, password: string) => Promise<any>;
   logout: () => void;
@@ -29,6 +30,7 @@ export const AuthProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<IAuth>(
     localStorage.getItem('authTokens')
       ? JSON.parse(localStorage.getItem('authTokens') || '')
@@ -53,6 +55,7 @@ export const AuthProvider = ({
         console.log('Success with auth');
         if (response.data.token && response.data.refreshToken) {
           setCurrentUser({ ...response.data });
+          setIsAuthenticated(true);
           localStorage.setItem(
             'authTokens',
             JSON.stringify({
@@ -71,10 +74,14 @@ export const AuthProvider = ({
   };
 
   const logout = async () => {
-    await axios.delete(API_URL + '/logout', {
-      headers: { Authorization: `Bearer ${currentUser.refreshToken}` },
+    const axiosInstance = axios.create({
+      headers: {
+        Authorization: `Bearer ${currentUser.refreshToken}`,
+      },
     });
+    axiosInstance.delete(API_URL + '/logout');
     localStorage.removeItem('authTokens');
+    setIsAuthenticated(false);
     setCurrentUser({
       token: '',
       refreshToken: '',
@@ -109,9 +116,41 @@ export const AuthProvider = ({
     }
   };
 
+  useEffect(() => {
+    const localStorageInfos: IAuth = localStorage.getItem('authTokens')
+      ? JSON.parse(localStorage.getItem('authTokens') || '')
+      : {
+          token: '',
+          refreshToken: '',
+          userId: '',
+        };
+    const axiosInstance = axios.create({
+      headers: {
+        Authorization: `Bearer ${localStorageInfos.refreshToken}`,
+      },
+    });
+    axiosInstance
+      .post(API_URL + 'checkToken')
+      .then((response: AxiosResponse) => {
+        if (response.status === 204) {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+      });
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ currentUser, login, logout, register, authHeader }}
+      value={{
+        currentUser,
+        login,
+        logout,
+        register,
+        authHeader,
+        isAuthenticated,
+      }}
     >
       {children}
     </AuthContext.Provider>

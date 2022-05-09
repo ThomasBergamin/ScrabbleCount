@@ -23,11 +23,11 @@ const Home = () => {
                 Bienvenue sur ScrabbleCount 👋
               </Heading>
               <Heading as="h2" textColor="gray.100" size="xl">
-                {auth?.currentUser.userId
+                {auth?.isAuthenticated
                   ? 'Ajoute ta partie ici ✏'
                   : 'Connecte toi pour ajouter tes parties !'}
               </Heading>
-              <AddGame authenticated={!!auth?.currentUser.userId} />
+              <AddGame authenticated={!!auth?.isAuthenticated} />
             </VStack>
           </Box>
         </SlideFade>

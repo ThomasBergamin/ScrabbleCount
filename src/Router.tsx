@@ -18,7 +18,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const auth = useAuth();
   const location = useLocation();
 
-  return auth?.currentUser.refreshToken ? (
+  return auth?.isAuthenticated ? (
     children
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />

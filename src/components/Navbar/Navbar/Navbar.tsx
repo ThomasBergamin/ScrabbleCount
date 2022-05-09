@@ -52,7 +52,7 @@ const Navbar = () => {
                 <Link as={RouterLink} to="/">
                   <NavbarItem name="Accueil" leftIcon={<HiHome />} />
                 </Link>
-                {auth?.currentUser.userId && (
+                {auth?.isAuthenticated && (
                   <>
                     <Link as={RouterLink} to="/games">
                       <NavbarItem name="Parties" leftIcon={<FaGamepad />} />
@@ -83,7 +83,7 @@ const Navbar = () => {
                     <Link as={RouterLink} to="/">
                       <MenuItem icon={<HiHome />}>Accueil</MenuItem>
                     </Link>
-                    {auth?.currentUser.userId && (
+                    {auth?.isAuthenticated && (
                       <>
                         <Link as={RouterLink} to="/games">
                           <MenuItem icon={<FaGamepad />}>Parties</MenuItem>
@@ -99,7 +99,7 @@ const Navbar = () => {
             </Menu>
           )}
           <Spacer />
-          {auth?.currentUser.userId ? (
+          {auth?.isAuthenticated ? (
             <Box onClick={handleDisconnect}>
               <NavbarItem disconnect name="Se déconnecter" />
             </Box>
