@@ -70,7 +70,10 @@ export const AuthProvider = ({
       });
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await axios.delete(API_URL + '/logout', {
+      headers: { Authorization: `Bearer ${currentUser.refreshToken}` },
+    });
     localStorage.removeItem('authTokens');
     setCurrentUser({
       token: '',

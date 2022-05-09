@@ -11,7 +11,11 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import {
+  Link as ReactRouterLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { useAuth } from '../../../contexts/Auth/useAuth';
 
 interface ILoginForm {
@@ -22,6 +26,7 @@ interface ILoginForm {
 const LoginForm = () => {
   const auth = useAuth();
   const navigate = useNavigate();
+  const { state }: any = useLocation();
   const {
     handleSubmit,
     register,
@@ -33,7 +38,7 @@ const LoginForm = () => {
         .login(data.email, data.password)
         .then((response) => {
           if (response.status == '200') {
-            navigate('/', { replace: true });
+            navigate(state?.path || '/', { replace: true });
           }
         })
         .catch((error) => {
