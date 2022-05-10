@@ -17,9 +17,8 @@ const NavbarItem = ({ name, leftIcon, disconnect, connect }: INavbarItem) => {
         background: 'white',
         color: disconnect ? 'red.600' : 'teal.500',
       }}
-      textColor="gray.100"
+      textColor="whiteAlpha.900"
       variant="ghost"
-      colorScheme="blue"
       leftIcon={leftIcon}
       backgroundColor={
         disconnect ? 'red.600' : connect ? 'teal.500' : 'gray.800'

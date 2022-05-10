@@ -45,7 +45,7 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
           navigate(`/games/${response.data.id}` || '/', { replace: true });
           toast({
             position: 'top',
-            title: 'Partie ajoutée',
+            title: 'Partie ajoutée 😍',
             description: 'Tu peux voir les détails sur cette page !',
             status: 'success',
             duration: 5000,

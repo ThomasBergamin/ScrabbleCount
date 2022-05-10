@@ -16,6 +16,11 @@ class dbService {
     return result.data;
   }
 
+  async deleteGame(id: string) {
+    const result = await instance.delete(API_URL + 'games/' + id);
+    return result;
+  }
+
   async postGames(data: {
     date: string;
     time: string;
