@@ -21,7 +21,7 @@ const Table = ({ headers, rows, handleRowClick }: ITable) => {
         </Tr>
       </Thead>
       <Tbody color="whiteAlpha.900">
-        {rows.map((row, index) => {
+        {rows.map((row) => {
           return (
             <Tr
               key={row[0]}

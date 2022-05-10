@@ -8,6 +8,7 @@ const RegisterCard = () => {
     <>
       <ReactRouterLink to="/">
         <IconButton
+          pos="absolute"
           aria-label="Close Button"
           backgroundColor="white"
           ml="6"

@@ -19,9 +19,6 @@ interface IAuthContext {
     email: string,
     password: string,
   ) => Promise<any>;
-  authHeader: () => {
-    Authorization: string;
-  };
 }
 
 export const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -143,14 +140,6 @@ export const AuthProvider = ({
       });
   };
 
-  const authHeader = () => {
-    if (currentUser.token) {
-      return { Authorization: 'Bearer ' + currentUser.token };
-    } else {
-      return { Authorization: 'no token' };
-    }
-  };
-
   return (
     <AuthContext.Provider
       value={{
@@ -158,7 +147,6 @@ export const AuthProvider = ({
         login,
         logout,
         register,
-        authHeader,
         isAuthenticated,
         isLoading,
       }}

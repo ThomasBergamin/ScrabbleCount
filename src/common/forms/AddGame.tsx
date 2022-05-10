@@ -76,6 +76,7 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
               disabled={!authenticated}
               id="date"
               type="date"
+              max={new Date().toLocaleDateString('en-ca')}
               {...register('date', {
                 required: 'Champ requis',
               })}

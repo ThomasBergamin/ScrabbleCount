@@ -76,9 +76,9 @@ export const Router = () => {
         <Route
           path="/register"
           element={
-            <RequireAuth>
+            <CheckIfAuthenticated>
               <Register />
-            </RequireAuth>
+            </CheckIfAuthenticated>
           }
         ></Route>
         <Route
