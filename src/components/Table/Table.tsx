@@ -24,7 +24,7 @@ const Table = ({ headers, rows, handleRowClick }: ITable) => {
         {rows.map((row, index) => {
           return (
             <Tr
-              key={row[index] + Math.random()}
+              key={row[0]}
               cursor={handleRowClick ? 'pointer' : 'default'}
               onClick={() => handleRowClick && handleRowClick(row[0])}
               _hover={{ backgroundColor: 'teal.400' }}

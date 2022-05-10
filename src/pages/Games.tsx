@@ -54,7 +54,7 @@ const Games = () => {
       });
       setRows(() => [...gamesRows]);
     }
-  }, [games, isLoading, loadingPlayers, players]);
+  }, [games, isLoading, loadingPlayers, players, isError]);
 
   const handleRowClick = (id: string) => {
     navigate(`/games/${id}`, { replace: true });
