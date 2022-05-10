@@ -3,7 +3,7 @@ import { IGame } from '../common/models/Game';
 import { useQuery } from 'react-query';
 
 const useGame = (id: string) => {
-  const queryKey = ['game'];
+  const queryKey = ['game', id];
 
   const {
     isLoading,

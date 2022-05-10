@@ -16,28 +16,22 @@ class dbService {
     return result.data;
   }
 
-  postGames(
-    data: {
-      date: string;
-      time: string;
-      location: string;
-      player1: string;
-      player2: string;
-      score1: string;
-      score2: string;
-      scrabbles2: string;
-      scrabbles1: string;
-    },
-
-    token: {
-      Authorization: string;
-    },
-  ) {
-    return instance.post(API_URL + 'games', data, { headers: token });
+  async postGames(data: {
+    date: string;
+    time: string;
+    location: string;
+    player1: string;
+    player2: string;
+    score1: string;
+    score2: string;
+    scrabbles2: string;
+    scrabbles1: string;
+  }) {
+    return await instance.post(API_URL + 'games', data);
   }
 
-  getPlayers(token: { Authorization: string }) {
-    return instance.get(API_URL + 'players', { headers: token });
+  getPlayers() {
+    return instance.get(API_URL + 'players');
   }
 }
 

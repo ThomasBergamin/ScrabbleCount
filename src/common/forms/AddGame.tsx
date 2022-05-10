@@ -8,11 +8,12 @@ import {
   Button,
   FormErrorMessage,
   Select,
+  useToast,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dbService from '../../services/dbService';
-import { useAuth } from '../../contexts/Auth/useAuth';
 import usePlayers from '../../hooks/usePlayers';
+import { useNavigate } from 'react-router-dom';
 
 interface IAddGameForm {
   date: string;
@@ -27,8 +28,9 @@ interface IAddGameForm {
 }
 
 const AddGame = ({ authenticated }: { authenticated: boolean }) => {
-  const auth = useAuth();
   const { players } = usePlayers();
+  const navigate = useNavigate();
+  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -36,18 +38,24 @@ const AddGame = ({ authenticated }: { authenticated: boolean }) => {
   } = useForm<IAddGameForm>();
 
   const onSubmit: SubmitHandler<IAddGameForm> = async (data) => {
-    if (auth) {
-      await dbService
-        .postGames(data, auth.authHeader())
-        .then((response) => {
-          if (response.status === 200) {
-            alert('Success');
-          } // TODO: Redirect user to game page (with id sent from backend)
-        })
-        .catch((error) => {
-          throw error.response;
-        });
-    }
+    await dbService
+      .postGames(data)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate(`/games/${response.data.id}` || '/', { replace: true });
+          toast({
+            position: 'top',
+            title: 'Partie ajoutée',
+            description: 'Tu peux voir les détails sur cette page !',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((error) => {
+        throw error.response;
+      });
   };
 
   return (

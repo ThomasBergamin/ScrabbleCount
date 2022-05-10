@@ -23,7 +23,11 @@ const GameDetails = () => {
       <Navbar />
       <Container maxW="120ch" py="3">
         <SlideFade in offsetY="50px">
-          <Center>{!isLoading && isFetching && <Loader />}</Center>
+          {!isLoading && isFetching && (
+            <Center>
+              <Loader />
+            </Center>
+          )}
 
           {isLoading ? (
             <Center>

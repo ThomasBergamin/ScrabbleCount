@@ -28,7 +28,6 @@ axiosApiInstance.interceptors.request.use(
     config.headers = {
       Authorization: `Bearer ${localStorageTokens?.token}`,
       Accept: 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded',
     };
     return config;
   },
