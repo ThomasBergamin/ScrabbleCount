@@ -1,26 +1,19 @@
-import { useEffect, useState } from 'react';
 import dbService from '../services/dbService';
-import { useAuth } from '../contexts/Auth/useAuth';
 import { IGame } from '../common/models/Game';
+import { useQuery } from 'react-query';
 
 const useGames = () => {
-  const auth = useAuth();
-  const [games, setGames] = useState<IGame[]>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState();
+  const queryKey = ['games'];
 
-  useEffect(() => {
-    if (auth) {
-      setLoading(true);
-      dbService
-        .getGames(auth.authHeader())
-        .then((response) => setGames(response.data))
-        .catch(setErrors)
-        .finally(() => setLoading(false));
-    }
-  }, []);
+  const {
+    isLoading,
+    data: games,
+    error,
+    isError,
+    isFetching,
+  } = useQuery<IGame[]>(queryKey, dbService.getGames, { staleTime: 60_000 });
 
-  return { games, loading, errors };
+  return { games, isLoading, isFetching, isError, error };
 };
 
 export default useGames;

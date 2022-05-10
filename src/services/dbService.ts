@@ -6,8 +6,14 @@ const instance = axiosApiInstance;
 // TODO : every time a call is made with token, if error => refresh token
 
 class dbService {
-  getGames(token: { Authorization: string }) {
-    return instance.get(API_URL + 'games', { headers: token });
+  async getGames() {
+    const result = await instance.get(API_URL + 'games');
+    return result.data;
+  }
+
+  async getGame(id: string) {
+    const result = await instance.get(API_URL + 'games/' + id);
+    return result.data;
   }
 
   postGames(

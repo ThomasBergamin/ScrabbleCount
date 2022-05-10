@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react';
-import useGames from './useGames';
+import dbService from '../services/dbService';
 import { IGame } from '../common/models/Game';
+import { useQuery } from 'react-query';
 
 const useGame = (id: string) => {
-  const [game, setGame] = useState<IGame>();
-  const { games, loading, errors } = useGames();
+  const queryKey = ['game'];
 
-  useEffect(() => {
-    if (games && !loading && !errors) {
-      setGame(() => games.find((game) => game._id === id));
-    }
-  }, [games, loading, errors]);
+  const {
+    isLoading,
+    data: game,
+    error,
+    isError,
+    isFetching,
+  } = useQuery<IGame>(queryKey, () => dbService.getGame(id), {
+    staleTime: 60_000,
+  });
 
-  return { game, loading, errors };
+  return { game, isLoading, isFetching, isError, error };
 };
 
 export default useGame;
