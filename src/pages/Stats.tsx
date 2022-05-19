@@ -13,12 +13,30 @@ import {
 } from '@chakra-ui/react';
 import moment from 'moment';
 import 'moment/locale/fr';
+import { useState, useEffect } from 'react';
+import { calcBestPlayer } from '../common/utils/gamesStats';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar/Navbar';
+import useGames from '../hooks/useGames';
+import usePlayers from '../hooks/usePlayers';
+import { IWinner } from '../common/models/Player';
 
 const Stats = () => {
   moment.locale('fr');
   const date = moment().format('Do MMMM YYYY, HH:mm');
+  const { games } = useGames();
+  const { players } = usePlayers();
+  const [winner, setWinner] = useState<IWinner>();
+
+  useEffect(() => {
+    if (games && players) {
+      const winnerInfos = calcBestPlayer(games, players);
+      setWinner(winnerInfos);
+    }
+  }, [games, players]);
+
+  // TODO : add loader waiting for games && players && winner
+
   return (
     <>
       <Navbar />
@@ -45,8 +63,8 @@ const Stats = () => {
             <StatGroup color="whiteAlpha.900" height="100%html">
               <Stat>
                 <StatLabel>Meilleur Joueur</StatLabel>
-                <StatNumber>Cécile</StatNumber>
-                <StatHelpText>25 parties gagnées</StatHelpText>
+                <StatNumber>{winner?.firstName}</StatNumber>
+                <StatHelpText>{winner?.wins} parties gagnées</StatHelpText>
               </Stat>
               <Spacer></Spacer>
               <Stat borderLeft="solid 2px white" pl="4">
@@ -54,7 +72,7 @@ const Stats = () => {
                 <StatNumber>535</StatNumber>
                 <StatHelpText>Christophe, le 05 Mai 2022</StatHelpText>
               </Stat>
-              {/* links to the game where the score was made */}
+              {/* TODO : links to the game where the score was made */}
               <Spacer></Spacer>
               <Stat borderLeft="solid 2px white" pl="4">
                 <StatLabel>Plus de Srabbles en une partie</StatLabel>
