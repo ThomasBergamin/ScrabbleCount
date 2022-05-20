@@ -18,9 +18,12 @@ const retrievePlayersList: InitPlayers = (games) => {
   return playersList;
 };
 
-type ICalc = (games: IGame[], players: IPlayer[]) => IWinner | undefined;
+type ICalcBestPlayer = (
+  games: IGame[],
+  players: IPlayer[],
+) => IWinner | undefined;
 
-const calcBestPlayer: ICalc = (games, players) => {
+const calcBestPlayer: ICalcBestPlayer = (games, players) => {
   const playersList = retrievePlayersList(games);
 
   const playersScores: { id: string; wins: number }[] = [];
@@ -42,11 +45,12 @@ const calcBestPlayer: ICalc = (games, players) => {
     if (a.wins > b.wins) return -1;
     if (a.wins < b.wins) return 1;
     return 0;
-  }); // sort playersScores by number of wins
+  });
 
   const winnerInfos: IWinner | undefined = players.find(
     (player) => player._id === playersScores[0].id,
   );
+
   if (winnerInfos) {
     winnerInfos.wins = playersScores[0].wins;
     return winnerInfos;
@@ -55,4 +59,53 @@ const calcBestPlayer: ICalc = (games, players) => {
   // TODO : Think about equality between multiple players
 };
 
-export { calcBestPlayer };
+type ICalcHighestScore = (games: IGame[]) => IGame | undefined;
+
+const calcHighScore: ICalcHighestScore = (games) => {
+  let highScoreGame: IGame | undefined;
+
+  games.forEach((game) => {
+    if (!highScoreGame) {
+      highScoreGame = game;
+    } else if (
+      game.type === 'Victory' &&
+      game.winner &&
+      highScoreGame?.winner &&
+      game.winner?.playerScore > highScoreGame?.winner?.playerScore
+    ) {
+      highScoreGame = game;
+    }
+  });
+
+  return highScoreGame;
+};
+
+type ICalcMostScrabbles = (
+  games: IGame[],
+) => { player: string; scrabbles: number; game: IGame | undefined } | undefined;
+
+const calcMostScrabbles: ICalcMostScrabbles = (games) => {
+  let mostScrabblesGame: IGame | undefined;
+  let mostScrabbles = { player: '', scrabbles: 0 };
+
+  games.forEach((game) => {
+    if (parseInt(game.player1.scrabbles) > mostScrabbles.scrabbles) {
+      mostScrabblesGame = game;
+      mostScrabbles = {
+        player: game.player1.id,
+        scrabbles: parseInt(game.player1.scrabbles),
+      };
+    }
+    if (parseInt(game.player2.scrabbles) > mostScrabbles.scrabbles) {
+      mostScrabblesGame = game;
+      mostScrabbles = {
+        player: game.player2.id,
+        scrabbles: parseInt(game.player2.scrabbles),
+      };
+    }
+  });
+
+  return { game: mostScrabblesGame, ...mostScrabbles };
+};
+
+export { calcBestPlayer, calcHighScore, calcMostScrabbles };

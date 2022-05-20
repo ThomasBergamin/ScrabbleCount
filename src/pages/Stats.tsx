@@ -14,12 +14,17 @@ import {
 import moment from 'moment';
 import 'moment/locale/fr';
 import { useState, useEffect } from 'react';
-import { calcBestPlayer } from '../common/utils/gamesStats';
+import {
+  calcBestPlayer,
+  calcHighScore,
+  calcMostScrabbles,
+} from '../common/utils/gamesStats';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar/Navbar';
 import useGames from '../hooks/useGames';
 import usePlayers from '../hooks/usePlayers';
 import { IWinner } from '../common/models/Player';
+import { IGame } from '../common/models/Game';
 
 const Stats = () => {
   moment.locale('fr');
@@ -27,11 +32,21 @@ const Stats = () => {
   const { games } = useGames();
   const { players } = usePlayers();
   const [winner, setWinner] = useState<IWinner>();
+  const [highScoreGame, setHighScoreGame] = useState<IGame>();
+  const [mostScrabblesInfos, setMostScrabblesInfos] = useState<{
+    player: string;
+    scrabbles: number;
+    game: IGame | undefined;
+  }>();
 
   useEffect(() => {
     if (games && players) {
       const winnerInfos = calcBestPlayer(games, players);
+      const highScoreGame = calcHighScore(games);
+      const mostScrabblesInfos = calcMostScrabbles(games);
+      setHighScoreGame(highScoreGame);
       setWinner(winnerInfos);
+      setMostScrabblesInfos(mostScrabblesInfos);
     }
   }, [games, players]);
 
@@ -63,21 +78,38 @@ const Stats = () => {
             <StatGroup color="whiteAlpha.900" height="100%html">
               <Stat>
                 <StatLabel>Meilleur Joueur</StatLabel>
-                <StatNumber>{winner?.firstName}</StatNumber>
+                <StatNumber>
+                  {winner?.firstName} {winner?.lastName[0]}.
+                </StatNumber>
                 <StatHelpText>{winner?.wins} parties gagnées</StatHelpText>
               </Stat>
               <Spacer></Spacer>
               <Stat borderLeft="solid 2px white" pl="4">
                 <StatLabel>Meilleur Score</StatLabel>
                 <StatNumber>535</StatNumber>
-                <StatHelpText>Christophe, le 05 Mai 2022</StatHelpText>
+                <StatHelpText>
+                  {
+                    players?.find(
+                      (player) =>
+                        player._id === highScoreGame?.winner?.playerId,
+                    )?.firstName
+                  }
+                  , le {highScoreGame?.date}
+                </StatHelpText>
               </Stat>
               {/* TODO : links to the game where the score was made */}
               <Spacer></Spacer>
               <Stat borderLeft="solid 2px white" pl="4">
                 <StatLabel>Plus de Srabbles en une partie</StatLabel>
-                <StatNumber>6</StatNumber>
-                <StatHelpText>Cécile, le 05 Mai 2022</StatHelpText>
+                <StatNumber>{mostScrabblesInfos?.scrabbles}</StatNumber>
+                <StatHelpText>
+                  {
+                    players?.find(
+                      (player) => player._id === mostScrabblesInfos?.player,
+                    )?.firstName
+                  }
+                  , le {mostScrabblesInfos?.game?.date}
+                </StatHelpText>
               </Stat>
             </StatGroup>
           </Box>
