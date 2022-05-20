@@ -35,8 +35,9 @@ class dbService {
     return await instance.post(API_URL + 'games', data);
   }
 
-  getPlayers() {
-    return instance.get(API_URL + 'players');
+  async getPlayers() {
+    const result = await instance.get(API_URL + 'players');
+    return result.data;
   }
 }
 

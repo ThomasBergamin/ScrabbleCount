@@ -21,9 +21,9 @@ import Loader from '../components/Loader/Loader';
 
 const Games = () => {
   const navigate = useNavigate();
-  const { isLoading, games, isError, error, isFetching } = useGames();
+  const { isLoading, games, isError, isFetching } = useGames();
 
-  const { players, loading: loadingPlayers } = usePlayers();
+  const { players, isLoading: loadingPlayers } = usePlayers();
 
   moment.locale('fr');
   const date = moment().format('Do MMMM YYYY, HH:mm');

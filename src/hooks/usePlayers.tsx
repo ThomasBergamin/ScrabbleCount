@@ -1,22 +1,21 @@
-import { useEffect, useState } from 'react';
 import dbService from '../services/dbService';
 import { IPlayer } from '../common/models/Player';
+import { useQuery } from 'react-query';
 
 const usePlayers = () => {
-  const [players, setPlayers] = useState<IPlayer[]>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState();
+  const queryKey = ['games'];
 
-  useEffect(() => {
-    setLoading(true);
-    dbService
-      .getPlayers()
-      .then((response) => setPlayers(response.data))
-      .catch(setErrors)
-      .finally(() => setLoading(false));
-  }, []);
+  const {
+    isLoading,
+    data: players,
+    error,
+    isError,
+    isFetching,
+  } = useQuery<IPlayer[]>(queryKey, dbService.getPlayers, {
+    staleTime: 60_000,
+  });
 
-  return { players, loading, errors };
+  return { players, isLoading, isFetching, isError, error };
 };
 
 export default usePlayers;
